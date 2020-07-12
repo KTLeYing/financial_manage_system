@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mzl.mapper.FinancialAnalysisMapper">
+    <!--//月收入的记录数-->
+    <select id="findMonthIncomeRecordCount" resultType="java.lang.Integer" parameterType="map">
+        select count(*)
+        from shouzhi_record
+        where user_id = #{user_id} and szr_date like '%${currentTime}%' and szr_num > 0
+    </select>
+
+    <!--月支出的记录数-->
+    <select id="findMonthSpendRecordCount" resultType="java.lang.Integer" parameterType="map">
+        select count(*)
+        from shouzhi_record
+		where user_id = #{user_id}  and szr_date like '%${currentTime}%' and -szr_num > 0
+    </select>
+
+    <!--月收入总金额-->
+    <select id="findMonthIncomeMoney" resultType="java.lang.Integer" parameterType="map">
+        select ifnull(sum(szr_num), 0)
+        from shouzhi_record
+        where user_id = #{user_id} and szr_date like '%${currentTime}%' and szr_num > 0
+    </select>
+
+    <!--月的支出总额-->
+    <select id="findMonthSpendMoney" resultType="java.lang.Integer" parameterType="map">
+        select ifnull(-sum(szr_num), 0)
+        from shouzhi_record
+		where user_id = #{user_id} and szr_date like '%${currentTime}%' and -szr_num > 0
+    </select>
+
+
+</mapper>

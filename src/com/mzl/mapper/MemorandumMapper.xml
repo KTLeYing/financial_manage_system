@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mzl.mapper.MemorandumMapper">
+
+    <!-- 添加到备忘录-->
+    <insert id="addMemorandum" parameterType="Memorandum">
+        insert into memorandum(recordTime, thingPath, topFont, user_id)
+        values(#{recordTime}, #{thingPath}, #{topFont}, #{user_id})
+    </insert>
+
+    <update id="editMemorandum" parameterType="Memorandum">
+        update memorandum
+        set topFont = #{topFont}
+        where mid = #{mid}
+    </update>
+
+    <!--删除备忘录-->
+    <delete id="deleteMemorandum" parameterType="int">
+        delete from memorandum
+        where mid = #{mid}
+    </delete>
+
+    <!--查询备忘录的总记录数-->
+    <select id="findMemorandumCount" resultType="java.lang.Integer" parameterType="int">
+        select count(*)
+        from memorandum
+        where user_id = #{uid};
+    </select>
+
+    <!--分页查询备忘录列表-->
+    <select id="findMemorandumList" resultType="com.mzl.pojo.Memorandum" parameterType="map">
+        select *
+        from memorandum
+        where user_id = #{uid}
+        order by recordTime desc, mid desc
+        limit #{startPosition}, #{pageRecord}
+    </select>
+
+    <!--查询当前的备忘录-->
+    <select id="oneMemorandum" resultType="com.mzl.pojo.Memorandum" parameterType="Memorandum">
+        select *
+        from memorandum
+        where mid = #{mid}
+    </select>
+
+
+</mapper>

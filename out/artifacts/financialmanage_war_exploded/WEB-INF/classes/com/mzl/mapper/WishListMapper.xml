@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mzl.mapper.WishListMapper">
+
+    <!--添加心愿单-->
+    <insert id="addWish" parameterType="WishList">
+        insert into wishlist(wid, wish, wnum, wdate, state, user_id)
+        values(#{wid}, #{wish}, #{wnum}, #{wdate}, #{state}, #{user_id})
+    </insert>
+
+    <!--更新心愿单-->
+    <update id="editWish" parameterType="WishList">
+        update wishlist
+        set wid = #{wid}, wish = #{wish}, wnum = #{wnum}, wdate = #{wdate}, state = #{state}
+        where id = #{id}
+    </update>
+
+    <!-- 删除心愿单-->
+    <delete id="deleteWish" parameterType="int">
+        delete from wishlist
+        where id =#{id}
+    </delete>
+
+    <!--查询心愿总记录数-->
+    <select id="findWishListCount" resultType="java.lang.Integer" parameterType="int">
+        select count(*)
+        from wishlist
+        where user_id = #{uid}
+    </select>
+
+    <!--分页查询内容列表-->
+    <select id="findWishList" resultType="com.mzl.pojo.WishList" parameterType="map">
+        select *
+        from wishlist
+        where user_id = #{uid}
+        order by wdate desc, wid desc
+        limit #{startPosition}, #{pageRecord}
+    </select>
+
+    <!--获取某人某天的心愿单个数-->
+    <select id="countWishListByTimeAndId" resultType="java.lang.Integer" parameterType="WishList">
+        select count(*)
+        from wishlist
+        where wdate = #{wdate} and user_id = #{user_id}
+    </select>
+
+    <!--查询心愿信息-->
+    <select id="findWishById" resultType="com.mzl.pojo.WishList" parameterType="int">
+        select *
+        from wishlist
+        where id = #{id}
+    </select>
+
+
+</mapper>

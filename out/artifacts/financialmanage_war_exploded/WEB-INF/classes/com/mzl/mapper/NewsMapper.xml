@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mzl.mapper.NewsMapper">
+
+    <!--添加新闻到数据库-->
+    <insert id="addNews" parameterType="News">
+        insert into news(nTitle, author, keyword, visitCount, recordTime, nContent)
+        values(#{nTitle}, #{author}, #{keyword}, #{visitCount}, #{recordTime}, #{nContent})
+    </insert>
+
+    <!--访问一次新闻，阅读量加1-->
+    <update id="addVisitCount" parameterType="int">
+        update news
+        set visitCount = visitCount + 1
+        where nid = #{nid}
+    </update>
+
+    <!--编辑修改数据库中的新闻-->
+    <update id="eidtNews" parameterType="News">
+        update news
+        set nTitle = #{nTitle}, author = #{author}, keyword = #{keyword}
+        where nid = #{nid}
+    </update>
+
+    <!-- 删除新闻-->
+    <delete id="deleteNews" parameterType="int">
+        delete from news
+        where nid = #{nid}
+    </delete>
+
+    <!-- 查出8条财务新闻，通过录入时间 和  访问量的多少来决定显示 -->
+    <select id="findNewsEightList" resultType="com.mzl.pojo.News" >
+         select * from news
+         order by visitCount desc, recordTime desc
+         limit 0, 8
+    </select>
+
+    <!-- 查询新闻总记录数 -->
+    <select id="findNewsCount" resultType="java.lang.Integer" parameterType="com.mzl.pojo.News">
+        select count(*) from news
+        <where>
+            <if test="nTitle != '' and nTitle != null">
+                and nTitle like '%${nTitle}%'
+            </if>
+            <if test="author != '' and author != null">
+                and author like '%${author}%'
+            </if>
+            <if test="keyword != '' and keyword != null">
+                and keyword like '%${keyword}%'
+            </if>
+        </where>
+    </select>
+
+    <!--分页查询新闻当前页记录列表-->
+    <select id="findNewsCurrentPageList" resultType="com.mzl.pojo.News" parameterType="Map">
+        select * from news
+        <where>
+            <if test="news.nTitle != '' and news.nTitle != null">
+                and nTitle like '%${news.nTitle}%'
+            </if>
+            <if test="news.author != '' and news.author != null">
+                and author like '%${news.author}%'
+            </if>
+            <if test="news.keyword != '' and news.keyword != null">
+                and keyword like '%${news.keyword}%'
+            </if>
+        </where>
+        limit #{startPosition}, #{pageRecord}
+    </select>
+
+    <select id="queryNewsById" resultType="com.mzl.pojo.News" parameterType="int">
+        select * from news
+        where nid = #{nid}
+    </select>
+
+    <!--查询新闻的文件路径-->
+    <select id="findNewsContent" resultType="com.mzl.pojo.News" parameterType="int">
+        select *
+        from news
+        where nid = #{nid}
+    </select>
+
+
+</mapper>

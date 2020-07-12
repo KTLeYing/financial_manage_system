@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mzl.mapper.UserMapper">
+
+    <!-- 通过用户名和密码查询用户是否存在-->
+    <select id="queryUserByUser" resultType="com.mzl.pojo.User" parameterType="com.mzl.pojo.User">
+        select * from user
+        where username = #{username} and password = #{password}
+    </select>
+
+    <!--通过用户名查询用户是否存在-->
+    <select id="queryUserByUsername" resultType="com.mzl.pojo.User" parameterType="com.mzl.pojo.User">
+        select * from user
+        where username = #{username}
+    </select>
+
+    <!--查询总记录数-->
+    <select id="findUsersCount" resultType="java.lang.Integer" parameterType="User">
+        select count(*)
+        from user
+        <where>
+            <if test="username != '' and username != null">
+                and username like '%${username}%'
+            </if>
+            <if test="email != '' and email != null">
+                and email like '%${email}%'
+            </if>
+            <if test="phone != '' and phone != null">
+                and phone like '%${phone}%'
+            </if>
+        </where>
+    </select>
+
+    <!--查询总记录数-->
+    <select id="findUsers" resultType="com.mzl.pojo.User" parameterType="map">
+        select *
+        from user
+        <where>
+            <if test="user.username != '' and user.username != null">
+                and username like '%${user.username}%'
+            </if>
+            <if test="user.email != '' and user.email != null">
+                and email like '%${user.email}%'
+            </if>
+            <if test="user.phone != '' and user.phone != null">
+                and phone like '%${user.phone}%'
+            </if>
+        </where>
+        limit #{startPosition}, #{pageRecord}
+    </select>
+
+    <!--查询要修改的用户原来信息-->
+    <select id="queryUserById" resultType="com.mzl.pojo.User" parameterType="int">
+        select *
+        from user
+        where uid = #{uid}
+    </select>
+
+    <!--用户注册-->
+    <insert id="insertUser">
+        <!-- 自增主键返回 -->
+        <selectKey keyProperty="uid" order="AFTER" resultType="int">
+            select last_insert_id()
+        </selectKey>
+        insert into user(username, password, sex, email, phone)
+        values(#{username}, #{password}, #{sex}, #{email}, #{phone})
+    </insert>
+
+    <update id="updatePasswordByUsername" parameterType="com.mzl.pojo.User">
+        update user
+        set password = #{password}
+        where username = #{username}
+    </update>
+
+    <!--编辑全部用户信息-->
+    <update id="editUserAll" parameterType="User">
+        update user
+        set username = #{username}, password = #{password}, sex = #{sex}, email = #{email}, phone = #{phone}
+        where uid = #{uid}
+    </update>
+
+    <!--进行修改用户信息-->
+    <update id="editUser" parameterType="User">
+         update user
+        set username = #{username}, password = #{password}, sex = #{sex}, email = #{email}, phone = #{phone}
+        where uid = #{uid}
+    </update>
+
+</mapper>
