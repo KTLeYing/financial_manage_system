@@ -1,8 +1,9 @@
-# financial_manage_system   
-理财管理系统   
-系统的框架：SSM框架
-开发工具:Idea
-数据库：MySQL
+# financial_manage_system     
+理财管理系统       
+后端框架：SSM框架   
+前端框架: bootstrap框架   
+开发工具:Idea  
+数据库：MySQL  
 
 亮点：在财务统计、财务分析、财务预算模块用了highchart的数据图形化技术，使用户更加直观看出自己收支的各种占比情况； 还使用了百度的Ueditor的编辑器，功能强大且丰富，大大满足了用户的需求；
 在前后端交互中大量使用了ajax和jQuery技术来自动校验各种信息，保证数据的及时性和准确性。
